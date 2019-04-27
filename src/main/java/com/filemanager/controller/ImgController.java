@@ -1,9 +1,8 @@
-package com.mkyong.controller;
-
+package com.filemanager.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mkyong.model.FileKeyValue;
-import com.mkyong.model.MFile;
-import com.mkyong.service.IImgService;
+import com.filemanager.model.FileKeyValueDTO;
+import com.filemanager.model.FileDTO;
+import com.filemanager.service.IImgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,12 +12,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.thymeleaf.util.StringUtils;
 
 import java.io.IOException;
 import java.util.List;
 
 @Controller
-public class FileController {
+public class ImgController {
     final String staticFolder = "static/files";
 
     @Autowired
@@ -27,7 +27,7 @@ public class FileController {
     @GetMapping("/")
     public String main(Model model) throws IOException {
         model.addAttribute("files", this.imgService.getResourceFolderFiles(this.staticFolder));
-        model.addAttribute("generatedString", "abcd789");
+        model.addAttribute("generatedString", StringUtils.randomAlphanumeric(8));
         return "index";
     }
 
@@ -35,8 +35,8 @@ public class FileController {
     @ResponseBody
     public ResponseEntity<String> dragDrop(@RequestBody String object) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<FileKeyValue> fileKeyValues = objectMapper.readValue(object, objectMapper.getTypeFactory()
-                .constructCollectionType(List.class, FileKeyValue.class));
+        List<FileKeyValueDTO> fileKeyValues = objectMapper.readValue(object, objectMapper.getTypeFactory()
+                .constructCollectionType(List.class, FileKeyValueDTO.class));
 
         this.imgService.dragDrop(fileKeyValues, this.staticFolder);
         return new ResponseEntity<>("success", HttpStatus.OK);
@@ -46,8 +46,8 @@ public class FileController {
     @ResponseBody
     public ResponseEntity<String> deleteItems(@RequestBody String object) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<MFile> files = objectMapper.readValue(object, objectMapper.getTypeFactory()
-                .constructCollectionType(List.class, MFile.class));
+        List<FileDTO> files = objectMapper.readValue(object, objectMapper.getTypeFactory()
+                .constructCollectionType(List.class, FileDTO.class));
         this.imgService.deleteItems(this.staticFolder, files, true);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
@@ -69,7 +69,7 @@ public class FileController {
     @RequestMapping(value = "/uploadImages", method = RequestMethod.POST)
     public ResponseEntity<String> uploadImages(MultipartHttpServletRequest request) throws IOException {
         List<MultipartFile> files = request.getFiles("files");
-        List<MFile> index = this.imgService.convertType(request.getParameter("index").split(","));
+        List<FileDTO> index = this.imgService.convertType(request.getParameter("index").split(","));
         this.imgService.deleteItems(this.staticFolder, index, false);
         this.imgService.replaceImages(files, index, this.staticFolder);
         return new ResponseEntity<>("success", HttpStatus.OK);

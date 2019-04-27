@@ -1,6 +1,6 @@
-package com.mkyong.service;
-import com.mkyong.model.FileKeyValue;
-import com.mkyong.model.MFile;
+package com.filemanager.service;
+import com.filemanager.model.FileKeyValueDTO;
+import com.filemanager.model.FileDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
@@ -15,7 +15,7 @@ import java.util.*;
 public class ImgService implements IImgService {
 
     @Override
-    public void replaceImages(List<MultipartFile> files, List<MFile> index, String folder) throws IOException {
+    public void replaceImages(List<MultipartFile> files, List<FileDTO> index, String folder) throws IOException {
         for(int i =0; i< files.size(); i++){
             String destination = getPath(folder) + "/" + index.get(i).getName();
             File fileUpload = new File(destination);
@@ -24,10 +24,10 @@ public class ImgService implements IImgService {
     }
 
     @Override
-    public List<MFile> convertType(String[] strArray) {
-        List<MFile> index = new ArrayList<>();
+    public List<FileDTO> convertType(String[] strArray) {
+        List<FileDTO> index = new ArrayList<>();
         for (String s: strArray){
-            MFile newFile = new MFile();
+            FileDTO newFile = new FileDTO();
             newFile.setName(s);
             index.add(newFile);
         }
@@ -56,11 +56,11 @@ public class ImgService implements IImgService {
     }
 
     @Override
-    public void deleteItems(String folder, List<MFile> files, boolean flag) {
+    public void deleteItems(String folder, List<FileDTO> files, boolean flag) {
         String pathName = getPath(folder);
-        for (final MFile file : files) {
-            File deletingfile = new File(pathName + "/" + file.getName());
-            Path pathToBeDeleted = Paths.get(deletingfile.getAbsolutePath());
+        for (final FileDTO file : files) {
+            File fileToDelete = new File(pathName + "/" + file.getName());
+            Path pathToBeDeleted = Paths.get(fileToDelete.getAbsolutePath());
             try {
                 Files.delete(pathToBeDeleted);
             } catch (IOException e) {
@@ -81,27 +81,27 @@ public class ImgService implements IImgService {
     }
 
     @Override
-    public void renameFiles(int i, String path) {
-        File file = new File(path + "/" + i + ".png");
+    public void renameFiles(int index, String path) {
+        File file = new File(path + "/" + index + ".png");
         if(file.exists() && !file.isDirectory()) {
-            File file2 = new File(path + "/" + (i-1) + ".png");
+            File file2 = new File(path + "/" + (index-1) + ".png");
             if (file.renameTo(file2))
                 System.out.println("Renamed successfully");
             else
                 System.out.println("Error");
-            renameFiles(i+1, path);
+            renameFiles(index+1, path);
         }
     }
 
     @Override
-    public void deleteItem(int i, String folder, boolean flag) {
+    public void deleteItem(int index, String folder, boolean flag) {
         String path = getPath(folder);
-        File file = new File(path + "/" + i + ".png");
+        File file = new File(path + "/" + index + ".png");
         Path pathToBeDeleted = Paths.get(file.getAbsolutePath());
         try {
             Files.delete(pathToBeDeleted);
             if (flag) {
-                renameFiles(i + 1, path);
+                renameFiles(index + 1, path);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -109,9 +109,9 @@ public class ImgService implements IImgService {
     }
 
     @Override
-    public void dragDrop(List<FileKeyValue> fileKeyValues, String folder) {
+    public void dragDrop(List<FileKeyValueDTO> fileKeyValues, String folder) {
 
-        for (final FileKeyValue fileKeyValue : fileKeyValues) {
+        for (final FileKeyValueDTO fileKeyValue : fileKeyValues) {
             if (!fileKeyValue.getKey().equals(fileKeyValue.getValue())){
                 String path = getPath(folder);
                 File file1 = new File(path + "/" + fileKeyValue.getValue() + ".png");
@@ -146,7 +146,10 @@ public class ImgService implements IImgService {
     public String getPath(String folder) {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         URL url = loader.getResource(folder);
-        String path = url.getPath();
+        String path = null;
+        if (url != null) {
+            path = url.getPath();
+        }
         return path;
     }
 

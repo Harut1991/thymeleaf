@@ -75,7 +75,7 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '.required__photo_menu--item-delete', function() {
-        var res = confirm("Do you want to delete?");
+        var res = confirm("Are you sure, you want to delete?");
         if(res) {
             var file_href = $(this).parent().find('.required__photo_menu--item-show').attr('href');
             var file_num = file_href.split('/files/')[1].split('.png?')[0];
@@ -141,7 +141,7 @@ $(document).ready(function() {
     $('#upload-file-multiple').change(function () {
         var files = document.getElementById('upload-file-multiple').files;
         if (files.length != $('.checkboxinpt:checked').length){
-            alert("nsheq enqan inchqan nsheleq")
+            alert("The selected and uploading files counts should be the same")
         }else{
             var index = '';
             $('.checkboxinpt:checked').each( function( I, element ){
@@ -200,7 +200,7 @@ $(document).ready(function() {
 
     $(document).on('click', '.photoe__selct_item--delete', function(){
         if($('.checkboxinpt:checked').length){
-            var res = confirm("Do you want to delete?");
+            var res = confirm("Are you sure, you want to delete?");
             if(res) {
                 var filename = []
                 for (var i = 0; i < $('.checkboxinpt:checked').length; i++) {
@@ -236,7 +236,7 @@ $(document).ready(function() {
                 });
             }
         }else{
-            alert("please select a file")
+            alert("please select a item")
         }
     });
 
