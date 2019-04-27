@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Spring Boot Thymeleaf</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/js/vendor.js}"></script>
+    <script type="text/javascript" th:src="@{/js/main.js}"></script>
+    <script type="text/javascript" th:src="@{/js/script.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/jquery-ui.css}"/>
+    <script type="text/javascript" th:src="@{/js/jquery-ui.js}"></script>
+</head>
+
+<body>
+<h2>файлы для тестирования вы можете найти в imagesForTesting папке</h2>
+    <div class="admin-container admin-container--flex">
+        <div class="content">
+            <form class="modeernation__wrapper">
+                <div class="modernation__wrapper_header">
+                    <input class="moderation__wrapper_btn" type="submit" value="Сохранить" />
+                </div>
+                <div class="modernation__wrapper_tabs">
+                    <div class="tabs__column">
+                        <div class="tab">
+                            <div class="tab_title">
+                                Фотографии
+                            </div>
+                            <div class="tab__wrapper tab__wrapper_photo">
+                                <div class="tab__wrapper_title tab__wrapper_title--photo">
+                                    Фото для ретуши
+                                </div>
+                                <div class="required__photos">
+                                    <div th:if="${files.get('retouching').size()}" class="r_f">
+                                        <div class="required__photos_wrapper">
+                                            <img download class="photo-src" th:src="'/files/' + ${files.get('retouching').get(0).getName()} + '?p='+ ${generatedString}" />
+                                            <div class="required__photo_select">
+                                                <div class="required__photo_select--bg"></div>
+                                                <div class="required__photo_select--input">
+                                                    <label class="inpt-cust"><input class="checkboxinpt" type="checkbox" /><span class="checkmark"></span></label>
+                                                </div>
+                                            </div>
+
+                                            <div class="required__photos_menu--wrapper">
+                                                <div class="required__photo_menu">
+                                                    <div class="required__photo_menu--bg"></div>
+                                                    <div class="required__photo_menu--items">
+                                                        <a class="required__photo_menu--item required__photo_menu--item-show" th:href="'/files/' + ${files.get('retouching').get(0).getName()}+ '?p='+ ${generatedString}"></a>
+                                                        <div class="required__photo_menu--item required__photo_menu--item-load"></div>
+                                                        <div class="required__photo_menu--item required__photo_menu--item-change"></div>
+                                                        <div class="required__photo_menu--item required__photo_menu--item-delete"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="tab__wrapper_title tab__wrapper_title--photo f_f" data-featherlight-filter="a" data-featherlight-gallery="">
+                                    Обязательные фото
+                                </div>
+                                <div th:if="${files.get('required').size()}" class="required__photos connectedSortable o_f" id="sortable1">
+                                            <div class="required__photos_wrapper" th:each="file: ${files.get('required')}">
+                                                <img class="photo-src" th:src="'/files/' + ${file.getName()}+ '?p='+ ${generatedString}" />
+                                                <div class="required__photo_select">
+                                                    <div class="required__photo_select--bg"></div>
+                                                    <div class="required__photo_select--input">
+                                                        <label class="inpt-cust"><input class="checkboxinpt" type="checkbox" /><span class="checkmark"></span></label>
+                                                    </div>
+                                                </div>
+                                                <div class="required__photos_menu--wrapper">
+                                                    <div class="required__photo_menu">
+                                                        <div class="required__photo_menu--bg"></div>
+                                                        <div class="required__photo_menu--items">
+                                                            <a class="required__photo_menu--item required__photo_menu--item-show" th:href="'/files/' + ${file.getName()}+ '?p='+ ${generatedString}"></a>
+                                                            <div class="required__photo_menu--item required__photo_menu--item-load"></div>
+                                                            <div class="required__photo_menu--item required__photo_menu--item-change"></div>
+                                                            <div class="required__photo_menu--item required__photo_menu--item-delete"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                </div>
+                                <div class="tab__wrapper_title tab__wrapper_title--photo">
+                                    Дополнительные фото
+                                </div>
+                                <div th:if="${files.get('additional').size()}" class="second__photos connectedSortable d_f" id="sortable2">
+                                            <div class="required__photos_wrapper" th:each="file: ${files.get('additional')}">
+                                                <img class="photo-src" th:src="'/files/' + ${file.getName()}+ '?p='+ ${generatedString}" />
+                                                <div class="required__photo_select">
+                                                    <div class="required__photo_select--bg"></div>
+                                                    <div class="required__photo_select--input">
+                                                        <label class="inpt-cust"><input class="checkboxinpt" type="checkbox" /><span class="checkmark"></span></label>
+                                                    </div>
+                                                </div>
+                                                <div class="required__photos_menu--wrapper">
+                                                    <div class="required__photo_menu">
+                                                        <div class="required__photo_menu--bg"></div>
+                                                        <div class="required__photo_menu--items">
+                                                            <a class="required__photo_menu--item required__photo_menu--item-show" th:href="'/files/' + ${file.getName()}+ '?p='+ ${generatedString}"></a>
+                                                            <div class="required__photo_menu--item required__photo_menu--item-load"></div>
+                                                            <div class="required__photo_menu--item required__photo_menu--item-change"></div>
+                                                            <div class="required__photo_menu--item required__photo_menu--item-delete"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                </div>
+                                <div class="photo__select_nav">
+                                    <div class="photo__select">
+                                        Выбрать фото
+                                    </div>
+                                    <div class="photoe__selct_items">
+                                        <div class="photoe__selct_item photoe__selct_item--load"></div>
+                                        <div class="photoe__selct_item photoe__selct_item--change"></div>
+                                        <div class="photoe__selct_item photoe__selct_item--delete"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <input type="file" accept="image/png" style="display:none" id="upload-file"/>
+    <form class="form-horizontal" id="myForm" method="POST" enctype="multipart/form-data">
+    <input type="file" name="files" multiple style="display:none" accept="image/png" id="upload-file-multiple"/>
+    </form>
+<!-- /.container -->
+</body>
+</html>
